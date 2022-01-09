@@ -1,6 +1,5 @@
 import './App.scss';
 import React from 'react';
-import { Component } from 'react';
 import { ContactForm } from './components/ContactForm/ContactForm';
 import { ContactsList } from './components/ContactList/ContactList';
 import { Container } from './components/Container/Container';
@@ -24,15 +23,13 @@ function App() {
     if (parsedStoragedContacts) {
       setContacts(parsedStoragedContacts);
     }
-  });
+  }, []);
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (this.state.contacts !== prevState.contacts) {
-  //     localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-  //   }
-  // }
+  useEffect(() => {
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts]);
 
-  const createContact = ({ name, number }) => {
+  const createContact = (name, number) => {
     const contact = {
       id: nanoid(),
       name,
@@ -47,20 +44,16 @@ function App() {
       return;
     }
 
-    this.setState(({ contacts }) => ({
-      contacts: [contact, ...contacts],
-    }));
+    setContacts([contact, ...contacts]);
   };
 
   const deleteContact = contactId => {
-    this.setState(({ contacts }) => ({
-      contacts: contacts.filter(contact => contact.id !== contactId),
-    }));
+    setContacts(contacts.filter(contact => contact.id !== contactId));
   };
 
   const changeFilter = e => {
     const { value } = e.currentTarget;
-    this.setState({ filter: value });
+    setFilter(value);
   };
 
   const getFilteredContacts = () => {
